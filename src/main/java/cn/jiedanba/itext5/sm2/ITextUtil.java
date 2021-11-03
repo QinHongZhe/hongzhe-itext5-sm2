@@ -113,7 +113,7 @@ public class ITextUtil {
 
 			ExternalSignature signature = new SM2PrivateKeySignature(pk, null);
 
-			TSAClient tsaClient = new TSAClientBouncyCastle(tsa);
+			TSAClient tsaClient = new SM2TSAClient(tsa);
 			MyMakeSignature.signDetached(appearance, digest, signature, chain, crlList, ocspClient, tsaClient, 0,
 					CryptoStandard.CMS);
 			return tmpos.toByteArray();
@@ -164,7 +164,7 @@ public class ITextUtil {
 	public static void rsaSignTest() throws CertificateException, NoSuchProviderException, IOException {
 		byte[] pdf = IOUtil.fileToByte("E:\\1.pdf");
 
-		byte[] stampImage = IOUtil.fileToByte("E:\\资料\\资料\\8b23a984922c9ae20217bd0a7aee4b42.png");
+		byte[] stampImage = IOUtil.fileToByte("E:\\资料\\资料\\微信图片_20211103114912.jpg");
 
 		PrivateKey pk = CAUtil.getPrivateKey(
 				"MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDJALDi0ozbUKSHVyE5D7SFsfLlEWRnuSphCqkLlOy8Zh9UtfD3s7ZWpnpRMivZD2iInSkaeqLJnPSXZ9RQQtT7YYAVIZ92ihQcfE7Eu0FvGhdYvh2BL9gEcNpjsmC6p2PQIxJuBuCFliyfwEQBQzrNJZNoGbK7kSX0pvYwPGP14XvFUuB/tu/5+LEQ8Bejaz1N3Z7EyIyC/1D4CA+pQC5JaRM3l17hqDoVcLgkoxWYd+haE52Y2COJLoOCHC1N2lo4QO4ISuGQCHhMSRDf5qEQHqCniDP/5mO3WVNlt1chWkFKAO57YsZ8WMxKI0FMuOituHfyDuONMESCuXxcIKGhAgMBAAECggEBAMPdjoCY13VnEcxoVRF7gle9XYll90czol5Juwx0JHQ5t1IesR9O2eF5/Dte/mdXom9tZf5Nfo+kCJv5K2TCmzQSgHMW/oLObmaLo14Fcu/GpvVs3OdkLcW2CrmXurZoItVRN8ZLoUHLYtSQ0DPCxWver9ODJy2rdScAA2phjq6rPVGN8IyN38YJx/xQkNkU3pqHJuJ4ZItr7ISVfO+KuYmIohj0GmRIDWKkm4Y0mrsnwox4egShYcO0EBG31xx2mPaMv6BwULbxOLh6L58cay+uVqFW4tuDiiLxrYqtjTqunOy4UZ0bxStwdjSwukecUIoNhiO/c2qN7gEF/TmSNIECgYEA9HpVNBsforH+7FfgJflg5vWW9AGrjVzgLJEr+HY6JLhxaZQ1UUeGCiNiHALS7FGiA3REQbJu4xo7CTdIt83ivD2SKGeGJxZPK7DnjoHv7k5fi+5zyBbqpYVHT/AqlG2ae3Z+MwULV5PSW7DJxpyNzqOI7gIKkRKkrLhBfh39g0kCgYEA0nnSpvilAperVdHC5rbJ+9kdZXpwgCv/Ft3YIctF8mUxPol0TZgzGNpbpbeuBRZu5bDDdZlZ9AAQjqxRC+UbQ6bhEE/ySTnsKYphb8s3D1LzDDnW3zy23iqlqG3x8GhjInPeEmdujdFv1R+H97VYW9QDPAlYWs8CkTaAbzEo05kCgYEAi7iqn1ftEZ+msM5cJXfLwNOVDSkzMVxmJjJlrd9rxXbAInX4rtYwrfSg6p9WiobxEAZPyDhBFXv1R4QYBCwfrDOIJ51a11Xxs2esPw7V4B1cj+2csDsgqa5tHiuFOkUVqAAFigUVAV1TOOHlv6PTi8h8xoHWJilAghHgJELhkzkCgYEAq6x//H8MoHuzXZF1ZperUke6KX5f6rt4Gl+inZXenKKbMwYMngnJi7j3TcjvIOk2VRUDqJUHgPTYjHbSuGAMB/dC1fpPhhi/nvZnGTdo1o/y/ILk1zr/cWDZs/LRhyStz3kwplRFIVm13OEWFx6MToI0jTCWJ6N31Zfd1FQFl+kCgYEAxfZITAS5m+Nbp8HoTeAXzXf3GfLP4dI1AGxUzKx4kUTgRSIoZUNw7XlD79HgGBHno5kLkEaNvOcifOjFhGRcF2vClCDOYQwZYzqW0tR2bBu0A4vwm+loIZSEJfyDcpPPQ49OD7JTi05zsxz+d2v6Ld8WvpxeaJAh50+7sPYgeH8=");
@@ -175,7 +175,7 @@ public class ITextUtil {
 		String tsa = "http://159.75.41.25:8082/service/tsa?type=RSA";
 
 		byte[] sign = rsaSign(pdf, stampImage, CAUtil.getCertificateChain(cert.getEncoded()), pk, null, null,
-				"数字签名，不可否认", "广东省深圳市南山区", tsa, 100, 100, 120 + 100, 120 + 100, 1);
+				"数字签名，不可否认", "广东省深圳市南山区", tsa, 80, 120, 100 + 100, 120 + 40, 1);
 
 		FileUtils.writeByteArrayToFile(new File("E:\\rsasign.pdf"), sign);
 	}
@@ -186,7 +186,7 @@ public class ITextUtil {
 
 		byte[] pdf = IOUtil.fileToByte("E:\\1.pdf");
 
-		byte[] stampImage = IOUtil.fileToByte("E:\\资料\\资料\\8b23a984922c9ae20217bd0a7aee4b42.png");
+		byte[] stampImage = IOUtil.fileToByte("E:\\资料\\资料\\微信图片_20211103114912.jpg");
 
 		PrivateKey pk = CAUtil.getPrivateKey(
 				"ME0CAQAwEwYHKoZIzj0CAQYIKoEcz1UBgi0EMzAxAgEBBCDUQcmurIXuqrhx1o/vBOR8QFSRTAAOj8QVQ8boBYen2aAKBggqgRzPVQGCLQ==");
